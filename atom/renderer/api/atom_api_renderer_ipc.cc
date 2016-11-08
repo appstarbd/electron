@@ -39,8 +39,10 @@ void Send(mate::Arguments* args,
   if (render_view == nullptr)
     return;
 
+  int id = render_view->GetRoutingID();
+
   bool success = render_view->Send(new AtomViewHostMsg_Message(
-      render_view->GetRoutingID(), channel, arguments));
+      id, id, channel, arguments));
 
   if (!success)
     args->ThrowError("Unable to send AtomViewHostMsg_Message");
@@ -55,8 +57,10 @@ base::string16 SendSync(mate::Arguments* args,
   if (render_view == nullptr)
     return json;
 
+  int id = render_view->GetRoutingID();
+
   IPC::SyncMessage* message = new AtomViewHostMsg_Message_Sync(
-      render_view->GetRoutingID(), channel, arguments, &json);
+      id, id, channel, arguments, &json);
   bool success = render_view->Send(message);
 
   if (!success)
